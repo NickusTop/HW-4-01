@@ -65,7 +65,7 @@ const galleryItems = [
 ];
 const gallery = document.querySelector('.gallery');
 
-const itemsMarkup = galleryItems.map(({ preview, original, description }) => {
+const itemsMurkup = galleryItems.map(({ preview, original, description }) => {
   return `
     <li class="gallery__item">
       <a class="gallery__link" href="${original}">
@@ -80,7 +80,7 @@ const itemsMarkup = galleryItems.map(({ preview, original, description }) => {
   `;
 }).join('');
 
-gallery.insertAdjacentHTML('beforeend', itemsMarkup);
+gallery.insertAdjacentHTML('beforeend', itemsMurkup);
 
 const lightbox = document.querySelector('.lightbox');
 const lightboxImage = document.querySelector('.lightbox__image');
