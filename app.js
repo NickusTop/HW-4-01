@@ -65,47 +65,44 @@ const galleryItems = [
 ];
 const gallery = document.querySelector('.gallery');
 
-function createGalleryItems(items) {
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
+const itemsMarkup = galleryItems.map(({ preview, original, description }) => {
+  return `
+    <li class="gallery__item">
+      <a class="gallery__link" href="${original}">
+        <img
+          class="gallery__image"
+          src="${preview}"
+          data-source="${original}"
+          alt="${description}"
+        />
+      </a>
+    </li>
+  `;
+}).join('');
 
-    const listItem = document.createElement('li');
-    listItem.classList.add('gallery__item');
-
-    const image = document.createElement('img');
-    image.classList.add('gallery__image');
-    image.src = item.preview;
-    image.alt = item.description;
-
-    listItem.appendChild(image);
-    gallery.appendChild(listItem);
-  }
-}
-
-createGalleryItems(galleryItems);
+gallery.insertAdjacentHTML('beforeend', itemsMarkup);
 
 const lightbox = document.querySelector('.lightbox');
-const lightboxContent = document.querySelector('.lightbox__content');
+const lightboxImage = document.querySelector('.lightbox__image');
 const closeButton = document.querySelector('.lightbox__button');
 
 gallery.addEventListener('click', function (event) {
+  event.preventDefault();
+
   const targetImage = event.target;
 
-  if (targetImage.classList.contains('gallery__image')) {
-    gallery.style.display = 'none';
+  if (targetImage.className === 'gallery__image') {
+    const originalSrc = targetImage.dataset.source;
+    const alt = targetImage.alt;
+
     lightbox.classList.add('is-open');
-    let originalSrc = '';
-    for (let i = 0; i < galleryItems.length; i++) {
-      if (galleryItems[i].preview === targetImage.src) {
-        originalSrc = galleryItems[i].original;
-        break;
-      }
-    }
-    lightboxContent.innerHTML = `<img src="${originalSrc}" alt="${targetImage.alt}" class="lightbox__image">`;
+    lightboxImage.src = originalSrc;
+    lightboxImage.alt = alt;
   }
 });
+
 closeButton.addEventListener('click', function () {
   lightbox.classList.remove('is-open');
-  gallery.style.display = 'grid';
-  lightboxContent.innerHTML = '';
+  lightboxImage.src = '';
+  lightboxImage.alt = '';
 });
